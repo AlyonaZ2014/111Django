@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 const AuthorItem = ({author}) => {
     return (
         <tr>
