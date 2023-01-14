@@ -31,12 +31,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from app.views import AuthorModelViewSet, ProjectModelViewSet, ToDoModelViewSet
+from app.views import ProjectListAPIView, ProjectModelViewSet, ToDoModelViewSet
 
 router = DefaultRouter()
-router.register('authors', AuthorModelViewSet)
+# router.register('authors', AuthorModelViewSet)
 router.register('projects', ProjectModelViewSet)
 router.register('tasks', ToDoModelViewSet)
+router.register('projectlist', ProjectListAPIView)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
