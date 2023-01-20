@@ -7,7 +7,13 @@ from .filters import ProjectFilter, ToDoFilter
 from rest_framework.pagination import LimitOffsetPagination
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListAPIView
+# 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
+# class ExampleView(APIView):
+#     permission_classes = [AllowAny]
+    # 
 
 # class AuthorModelViewSet(ModelViewSet):
 #     queryset = Author.objects.all()
@@ -26,6 +32,7 @@ class ProjectListAPIView(ListAPIView, ModelViewSet):
 
 
 class ProjectModelViewSet(ModelViewSet):
+    # permission_classes = [AllowAny]
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = Project.objects.all()
     serializer_class = ProjectModelSerializer

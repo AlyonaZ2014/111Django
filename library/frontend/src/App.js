@@ -1,8 +1,8 @@
 import React from 'react'
 import AuthorList from './components/Author.js'
-import BookList from './components/Book.js'
+import BooksList from './components/Books.js'
 import AuthorBookList from './components/AuthorBook.js'
-import {HashRouter, Route, Link, Switch, Redirect} from 'react-router-dom'
+import {BrowserRouter, Route, Link, Switch, Redirect} from 'react-router-dom'
 
 const NotFound404 = ({ location }) => {
   return (
@@ -45,7 +45,7 @@ class App extends React.Component {
           <Switch> 
               <Route exact path='/' component={() => <AuthorList
 items={this.state.authors} />} />
-              <Route exact path='/books' component={() => <BookList
+              <Route exact path='/books' component={() => <BooksList
 items={this.state.books} />} />
             <Route path="/author/:id">
               <AuthorBookList items={this.state.books} />
