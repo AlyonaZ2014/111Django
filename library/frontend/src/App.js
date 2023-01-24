@@ -1,97 +1,89 @@
-import React from 'react'
-import AuthorList from './components/Author.js'
-import BooksList from './components/Books.js'
-import AuthorBookList from './components/AuthorBook.js'
-import {BrowserRouter, Route, Link, Switch, Redirect} from 'react-router-dom'
+import request from 'request';
+import React, { Component } from 'react';
+import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import './App.css';
+import UsersList from './components/Users';
+import ProjectList from './components/Projects';
+import ToDoList from './components/ToDo';
+import Header from './components/Menu';
+import Footer from './components/Footer';
+import NotFound404 from './components/NotFound404';
+import ProjectDetail from './components/ProjectDetail';
+import Home from './components/Home';
 
-const NotFound404 = ({ location }) => {
-  return (
-  <div>
-    <h1>Страница по адресу '{location.pathname}' не найдена</h1>
-  </div>
-  )
-}
 
-class App extends React.Component {
+
+class App extends Component {
   constructor(props) {
     super(props)
-    const author1 = {id: 1, name: 'Грин', birthday_year: 1880}
-    const author2 = {id: 2, name: 'Пушкин', birthday_year: 1799}
-    const authors = [author1, author2]
-    const book1 = {id: 1, name: 'Алые паруса', author: author1}
-    const book2 = {id: 2, name: 'Золотая цепь', author: author1}
-    const book3 = {id: 3, name: 'Пиковая дама', author: author2}
-    const book4 = {id: 4, name: 'Руслан и Людмила', author: author2}
-    const books = [book1, book2, book3, book4]
+    const apiPath = 'http://localhost:8000/api/'
     this.state = {
-      'authors': authors,
-      'books': books
+      'users': [],
+      'projects': [],
+      'todo': [],
+      'api': [
+        apiPath + 'users',
+        apiPath + 'projects',
+        apiPath + 'todo',
+      ]
     }
   }
+
+  pullData(url) {   
+    let result = [];
+    const key = url.split('/').pop();
+
+    const _request = (url) => {
+      request(url, (error, response, body) => {
+        _pullData(body);
+      });
+    }
+
+    const _pullData = function (body) {
+      const parsedData = JSON.parse(body);
+      result.push(...parsedData.results);
+      if (!parsedData.next)
+        return;
+      _request(parsedData.next);
+    }
+
+    _request(url);
+
+    return { [key]: result };
+  }
+
+  componentDidMount() {
+    const pulledData = this.state.api.map(url => {
+      return this.pullData(url);
+    }); 
+    setTimeout(() => {
+      this.setState(Object.assign(...pulledData));
+    }, 500)
+  }
+
   render() {
     return (
-      <div className="App">
-        <BrowserRouter>
-        <nav>
-          <ul>
-            <li>
-              <Link to='/'>Authors</Link>
-            </li>
-            <li>
-              <Link to='/books'>Books</Link>
-            </li>
-          </ul>
-        </nav> 
-          <Switch> 
-              <Route exact path='/' component={() => <AuthorList
-items={this.state.authors} />} />
-              <Route exact path='/books' component={() => <BooksList
-items={this.state.books} />} />
-            <Route path="/author/:id">
-              <AuthorBookList items={this.state.books} />
-            </Route>
-            <Redirect from='/authors' to='/' />
-            <Route component={NotFound404} />
-          </Switch>
-        </BrowserRouter>
+      <div className="sub_body">
+        <div className="top">
+          <BrowserRouter>
+            <Header />
+              <Routes>
+                <Route path='/' element={<Home/>} />
+                  <Route path='projects' element={<ProjectList projects={this.state.projects}/>} />
+                    <Route path='projects/:id' element={<ProjectDetail projects={this.state.projects}/>} />
+                  <Route path='todo' element={<ToDoList toDoTasks={this.state.todo}
+                    projects={this.state.projects} users={this.state.users}/>} />
+                  <Route path='users' element={<UsersList users={this.state.users}/>} />
+                  <Route path='*' element={<NotFound404 />} />
+              </Routes>
+          </BrowserRouter>
+        </div>
+        <div className="footer bg-light">
+          <Footer />
+        </div>
       </div>
-    )
+    );
   }
 }
-export default App;      
 
-
-// import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-// import AuthorList from './components/Author.js'
-// import axios from 'axios'
-// class App extends React.Component {
-//   constructor(props) {
-//     super(props)
-//     this.state = {
-//       'authors': []
-//     }
-//   }
-
-//   componentDidMount() {
-//     axios.get('http://127.0.0.1:8000/api/authors')
-//       .then(response => {
-//         const authors = response.data
-//           this.setState(
-//             {
-//             'authors': authors
-//           }
-//         )
-//       }).catch(error => console.log(error))
-//   }
- 
-//   render () {
-//     return (
-//       <div>
-//         <AuthorList authors={this.state.authors} />
-//       </div>
-//     )
-//   }
-// }
-// export default App;
+export default App;
