@@ -1,9 +1,13 @@
 from rest_framework import viewsets, permissions
 from .models import Author, Book
-from .serializers import AuthorSerializer, BookSerializer, BookSerializerBase
+from .serializers import AuthorSerializer, AuthorSerializerBase, BookSerializer, BookSerializerBase
 class AuthorViewSet(viewsets.ModelViewSet):
     serializer_class = AuthorSerializer
     queryset = Author.objects.all()
+    def get_serializer_class(self):
+        if self.request.version == '2.0':
+            return AuthorSerializerBase
+        return AuthorSerializer
 class BookViewSet(viewsets.ModelViewSet):
 # permission_classes = [permissions.IsAuthenticated]
     serializer_class = BookSerializer

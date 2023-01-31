@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "authapp",
     "todoapp",
     "corsheaders",
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -130,6 +131,12 @@ REST_FRAMEWORK = {
         "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    # "DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning",
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    # 'DEFAULT_VERSIONING_CLASS':
+    #     'rest_framework.versioning.QueryParameterVersioning',
+    'DEFAULT_VERSIONING_CLASS':
+     "rest_framework.versioning.AcceptHeaderVersioning",
     "PAGE_SIZE": 100,
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"],
