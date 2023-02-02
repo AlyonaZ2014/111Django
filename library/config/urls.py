@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.authtoken import views
 from rest_framework.routers import DefaultRouter
+from graphene_django.views import GraphQLView
 # from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 
@@ -41,6 +42,7 @@ urlpatterns = [
     name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0),
     name='schema-redoc'),
+    path("graphql/", GraphQLView.as_view(graphiql=True)),
 ]
     # path("api-jwt/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     # path("api-jwt/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

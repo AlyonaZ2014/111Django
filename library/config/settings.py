@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
+    "django.contrib.staticfiles" ,
+    "graphene_django",
     "corsheaders",
     "django_filters",
     "rest_framework",
@@ -151,3 +152,7 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+GRAPHENE = {
+"SCHEMA": "library.schema.schema"
+}
